@@ -1,4 +1,4 @@
-package Optimiser.util;
+package com.gmail.gazllloyd.Optimiser.util;
 
 import java.util.Iterator;
 
@@ -14,7 +14,7 @@ import java.util.Iterator;
  * </p>
  *
  * @author Alistair A. Israel
- * @see SepaPnIterator
+ * see SepaPnIterator
  */
 public class SepaPnkIterator extends ReadOnlyIterator<int[]> {
 
@@ -186,7 +186,7 @@ abstract class ReadOnlyIterator<T> implements Iterator<T> {
     public static final String REMOVE_OPERATION_NOT_SUPPORTED_MESSAGE = "remove() operation not supported!";
 
     /**
-     * Not supported. Throws {@link RemoveNotSupported} exception.
+     * Not supported. Throws {@link UnsupportedOperationException} exception.
      */
     public final void remove() {
         throw new UnsupportedOperationException(REMOVE_OPERATION_NOT_SUPPORTED_MESSAGE);

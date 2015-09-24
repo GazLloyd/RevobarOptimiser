@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="CmdOptimiser">
+    <output-path>$PROJECT_DIR$/out/artifacts/CmdOptimiser</output-path>
+    <root id="archive" name="CmdOptimiser.jar">
+      <element id="module-output" name="RevobarOptimiser" />
+      <element id="library" level="project" name="commons-cli-1.2" />
+    </root>
+  </artifact>
+</component>

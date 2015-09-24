@@ -1,9 +1,8 @@
-package Optimiser;
+package com.gmail.gazllloyd.Optimiser;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import Optimiser.util.PermIterator;
+import java.util.*;
+
+import com.gmail.gazllloyd.Optimiser.util.PermIterator;
 
 /**
  * Created by Gareth Lloyd on 24/02/15.
@@ -19,7 +18,7 @@ public class Optimiser {
     //all abilities to be considered for the bar
     public static Ability[] abilities;
 
-    public static ArrayList<ArrayList<Integer>> barsdone;
+    public static HashMap<String,Boolean> barsdone;
 
     //maximum number of iterations - permuations is O(n!), so this stops it going for far too long if considering larger n
     //  if n! > MAX_ITER, you can run a few times, reordering the abilities array each time
@@ -33,8 +32,6 @@ public class Optimiser {
     public static boolean STUNS = false;
 
     public static void main(String[] args) {
-        double max = 0;
-
         //define all abilities to be considered
         Ability[] l = {
 
@@ -64,7 +61,7 @@ public class Optimiser {
                 new Ability("Chain", 17, 3, 0.6),
                 //new Ability("Concentrated Blast", 9, 6, 1.476),
                 new Ability("Sonic Wave", 9, 3, 0.942),
-                new Ability("Corruption Blast", 25, 3, 2),
+                //new Ability("Corruption Blast", 25, 3, 2),
 
 /*
                 //ranged
@@ -83,8 +80,8 @@ public class Optimiser {
                 //new Ability("Anticipation",40,3,0),
                 //new Ability("Freedom",50,3,0),
                 //constitution
-                //new Ability("Sacrifice",50,3,0.6),
-                //new Ability("Tuska's Wrath",25,3,0.66), // (Non-Slayer)
+                new Ability("Sacrifice",50,3,0.6),
+                new Ability("Tuska's Wrath",25,3,0.7), // (Non-Slayer)
                 //new Ability("Tuska's Wrath",200,3,6.72), // (Slayer)
 
         };
@@ -96,19 +93,24 @@ public class Optimiser {
         //iterate over every permutation, with a cap of MAX_ITER times
         int i = 0;
         int[] bar;
-        Bar val;
-        barsdone = new ArrayList<ArrayList<Integer>>();
-        MAX_ABILS = 6;
+        Bar val = null;
+        Bar best = new Bar();
+        barsdone = new HashMap<String,Boolean>();
+        MAX_ABILS = 9;
         for(Iterator<int[]> it = new PermIterator(abilities.length); it.hasNext() && i < MAX_ITER; i++) {
             //for(Iterator<int[]> it = new SepaPnkIterator(abilities.length, MAX_ABILS); it.hasNext() && i < MAX_ITER; i++) {
             bar = it.next();
-            //if (!checkbar(bar)) {
-            if (true) {
-                val = calcrevo(bar, max);
-                barsdone.add(new ArrayList<Integer>(val.used));
-                max = Math.max(val.val, max);
+            if (!checkbar(bar)) {
+            //if (true) {
+                val = calcrevo(bar, best.val);
+                barsdone.put(val.used.toString(),true);
+                if (val.val > best.val) {
+                    best = val;
+                }
             }
         }
+        System.out.println("Best bar: " + best.toString());
+        System.out.println("AADPT: " + best.val);
         System.out.println("Individual bars checked: " + barsdone.size());
         /*i = 0;
         Cycle cycl, cyclmax = null;
@@ -122,7 +124,7 @@ public class Optimiser {
         }
         System.out.println(cyclmax.toString());*/
 
-        //int[] a = {4,3,7,6,1,3};
+        //int[] a = {6,3,5,8,1,4};
         //calcrevo(a, 0);
         //int[] b = {1,5,4,3,0,6};
         //calcrevo(reorder(b), 0);
@@ -167,16 +169,14 @@ public class Optimiser {
 
     public static boolean checkbar(int[] bar) {
         boolean out;
-        for (ArrayList<Integer> b : barsdone) {
-            out = true;
-            for (int i = 0; i < b.size(); i++) {
-                if (b.get(i) != bar[i]) {
-                    out = false;
-                    break;
-                }
-            }
-            if (out)
+        ArrayList<Integer> b = new ArrayList<Integer>(bar.length);
+        for (int i : bar) {
+            b.add(i);
+        }
+        for (int i = 1; i < bar.length; i++) {
+            if (barsdone.containsKey(b.subList(0,i))) {
                 return true;
+            }
         }
         return false;
     }
@@ -198,7 +198,8 @@ public class Optimiser {
         int time = 0, incr = 0, stundur=0;
         double damage = 0;
         Ability next;
-        boolean antic = false;
+        String forcedabil = "Sacrifice";
+        boolean forcedabilused = false;
         Bar out = new Bar();
 
         //reset all ability cooldowns and used status
@@ -208,11 +209,17 @@ public class Optimiser {
         //test for TICKS
         while (time < TICKS) {
             next = null;
-
+            String barstate = "";
             //reduce cooldown of all abilities by duration of previous ability
-            for (Ability a : abilities)
+            for (Ability a : abilities) {
                 a.reducecooldown(incr);
+            }
             stundur = Math.max(0,stundur-incr);
+
+
+            //for (int i = 0; i < bar.length && i < MAX_ABILS; i++) {
+             //   barstate += "[" + bar[i].cd + "]  ";
+            //}
 
             //determine next ability to be used
             //for (Ability a :  bar) {
@@ -234,10 +241,11 @@ public class Optimiser {
                 out.err = true;
                 return out;
             }
-            if (!antic && next.name == "Anticipation") {
-                antic = true;
+            if (next.name == forcedabil) {
+                forcedabilused = true;
                 //System.out.println("Used anticipation at t=" + time);
             }
+            //System.out.println("Used: " + next.name + "\t\t" + barstate);
 
             //activate the ability
             next.putoncooldown(); //put it on cooldown
@@ -252,19 +260,21 @@ public class Optimiser {
         //System.out.println("Bar "+Arrays.toString(bar)+" damage: "+damage+" ticks "+time+"  DPT: "+dps+"  max:"+max);
 
         if (dps > max) {
-            System.out.println("Bar "+Arrays.toString(bar)+" (stuns: "+STUNS+")  damage: "+damage+" ticks "+time+"  DPT: "+dps+"\nUsed abilities:");
+            //System.out.println("Bar "+Arrays.toString(bar)+" (stuns: "+STUNS+")  damage: "+damage+" ticks "+time+"  DPT: "+dps+"\nUsed abilities:");
             //System.out.println(dps);
             String s = "";
             for (int i = 0; i < bar.length; i++)
                 if (bar[i].used) {
                     s += bar[i]+",";
                 }
-            System.out.println(s);
+            //System.out.println(s);
         }
 
-        for (int i = 0; i < bar.length; i++)
-            out.used.add(inbar[i]);
+        for (Ability a : bar)
+            out.used.add(a);
         out.val = dps;
+        if (!forcedabilused)
+            out.val = 0;
         return out;
     }
 

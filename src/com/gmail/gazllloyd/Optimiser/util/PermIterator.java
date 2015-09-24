@@ -1,4 +1,4 @@
-package Optimiser.util;
+package com.gmail.gazllloyd.Optimiser.util;
 
 /**
  * Created by Gareth Lloyd on 24/02/15.

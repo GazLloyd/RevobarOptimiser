@@ -1,14 +1,19 @@
-package Optimiser;
+package com.gmail.gazllloyd.Optimiser;
+
+import javax.swing.*;
+import java.awt.*;
 
 /**
  * Created by Gareth Lloyd on 12/08/2015.
  */ //ability class
-class Ability {
+public class Ability {
+    public static Toolkit toolkit = Toolkit.getDefaultToolkit();
     public String name;
     public int cooldown; //in ticks
     public int duration; //in tic2ks
     public double damage; //average - usually (max+0.2*max)/2==0.6*max
     public int cd = 0;
+    public ImageIcon img;
     boolean used = false;
     int usedcount = 0;
     boolean stuns = false;
@@ -42,6 +47,8 @@ class Ability {
         this.duration = duration;
         this.damage = damage;
         this.stundmg = damage; //gets overwritten in other constructors
+
+        this.img = createImageIcon("/resources/"+name+".png", name);
     }
 
     public void putoncooldown() {
@@ -62,4 +69,16 @@ class Ability {
     public String toString() {
         return name;
     }
+
+
+    private ImageIcon createImageIcon(String path, String description) {
+        java.net.URL imgURL = getClass().getResource(path);
+        if (imgURL != null) {
+            return new ImageIcon(imgURL, description);
+        } else {
+            System.err.println("Couldn't find file: " + path);
+            return null;
+        }
+    }
+
 }

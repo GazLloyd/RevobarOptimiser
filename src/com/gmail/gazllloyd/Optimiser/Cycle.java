@@ -1,4 +1,4 @@
-package Optimiser;
+package com.gmail.gazllloyd.Optimiser;
 
 import java.util.Arrays;
 
