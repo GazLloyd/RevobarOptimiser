@@ -1,4 +1,4 @@
-package com.gmail.gazllloyd.Optimiser.util;
+package rsw.gazlloyd.Optimiser.util;
 
 import java.util.Iterator;
 

@@ -1,9 +1,8 @@
-package com.gmail.gazllloyd.Optimiser;
+package rsw.gazlloyd.Optimiser;
 
 import org.apache.commons.cli.*;
 
 import java.io.*;
-import java.util.Arrays;
 import java.util.logging.Logger;
 
 /**
@@ -23,12 +22,14 @@ public class CmdOptimiser {
 
         opt.addOption("stun", false, "Stuns");
         opt.addOption("force", true, "Ability to force");
+        opt.addOption("slay", false, "Slayer");
         opt.addOption("tick", true, "Number of simulation ticks");
         opt.addOption("max", true, "Maximum number of abilities");
         opt.addOption("iter", true, "Maximum number of iterations");
 
         //bulk testing
         opt.addOption("f", true, "Text file to load bars from");
+        opt.addOption("page", true, "Page to build");
         opt.addOption("o", true, "Output filename");
 
         CommandLineParser cmdp = new BasicParser();
@@ -56,6 +57,9 @@ public class CmdOptimiser {
                 out = new File(cmd.getOptionValue("o"));
             }
             bulk(new File(cmd.getOptionValue("f")), out);
+        }
+        else if (cmd.hasOption("page")) {
+            new PageBuild(new File(cmd.getOptionValue("page")), new File(cmd.getOptionValue("o")));
         }
         else {
             log.severe("You didn't specify what to do! Use -t <bar> to find the AADPT of that bar, -b <abils> to optimise a single bar or -f <file> to bulk-optimise!");
@@ -117,6 +121,10 @@ public class CmdOptimiser {
                     if (s[1].equalsIgnoreCase("stuns")) {
                         Optimiser2.STUNS = Boolean.parseBoolean(s[2]);
                         outstream.println("SET stuns to "+s[2]);
+                    }
+                    else if (s[1].equalsIgnoreCase("slayer")) {
+                        Optimiser2.SLAYER = Boolean.parseBoolean(s[2]);
+                        outstream.println("SET slayer to "+s[2]);
                     }
                     else if (s[1].equalsIgnoreCase("ticks")) {
                         if ((i = getInt(s[2])) > 0) {

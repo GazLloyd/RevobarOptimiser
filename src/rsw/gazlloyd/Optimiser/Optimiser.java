@@ -1,8 +1,8 @@
-package com.gmail.gazllloyd.Optimiser;
+package rsw.gazlloyd.Optimiser;
 
 import java.util.*;
 
-import com.gmail.gazllloyd.Optimiser.util.PermIterator;
+import rsw.gazlloyd.Optimiser.util.PermIterator;
 
 /**
  * Created by Gareth Lloyd on 24/02/15.
@@ -81,8 +81,8 @@ public class Optimiser {
                 //new Ability("Freedom",50,3,0),
                 //constitution
                 new Ability("Sacrifice",50,3,0.6),
-                new Ability("Tuska's Wrath",25,3,0.7), // (Non-Slayer)
-                //new Ability("Tuska's Wrath",200,3,6.72), // (Slayer)
+                //new Ability("Tuska's Wrath",25,3,0.7), // (Non-Slayer)
+                new Ability("Tuska's Wrath",200,3,6.72), // (Slayer)
 
         };
 

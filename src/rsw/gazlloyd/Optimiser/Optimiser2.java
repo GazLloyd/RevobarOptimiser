@@ -1,6 +1,6 @@
-package com.gmail.gazllloyd.Optimiser;
+package rsw.gazlloyd.Optimiser;
 
-import com.gmail.gazllloyd.Optimiser.util.PermIterator;
+import rsw.gazlloyd.Optimiser.util.PermIterator;
 
 import java.io.PrintStream;
 import java.util.Arrays;
@@ -14,7 +14,7 @@ import java.util.logging.Logger;
 public class Optimiser2 {
     //globals
     public static HashMap<String,Ability> abilities;
-    public static int MAX_ABILS = 9, TICKS = 3000, CYCLE_TICKS = 1000, MAX_ITER = 5000000;
+    public static int MAX_ABILS = 9, TICKS = 1000, CYCLE_TICKS = 1000, MAX_ITER = 5000000;
     public static boolean STUNS = false, SLAYER = false, FORCED_ENABLED = false;
     public static String FORCED_ABIL = "Sacrifice";
     static Logger log;
@@ -25,59 +25,69 @@ public class Optimiser2 {
     public String[] abilstr;
     public Ability[] abils;
     public String note;
+    public Bar bar;
+    public boolean optimised = false;
 
     public static void setup() {
         log = Logger.getAnonymousLogger();
         abilities = new HashMap<>();
         //attack
-        makeAbility("Slice", 5, 3, 0.7); //0.7 from data - appears slice's minimum is ~30% and max is 110%
-        makeAbility("Havoc", 17, 3, 1.25*0.6); //dw
+        makeAbility("Slice", 5, 3, (0.3+1.2)/2, (0.8+1.46)/2);
+        makeAbility("Havoc", 17, 1.25*0.6); //dw
         makeAbility("Backhand", 25, 3, 1*0.6, 5); //no kick included
-        makeAbility("Smash", 17, 3, 1.25*0.6); //2h
-        makeAbility("Barge", 34, 3, 1.25*0.6); //doesn't work in instances
-        makeAbility("Sever", 25, 3, 1.88*0.6);
+        makeAbility("Smash", 17, 1.25*0.6); //2h
+        makeAbility("Barge", 34, 1.25*0.6); //doesn't work in instances
+        makeAbility("Sever", 25, 1.88*0.6);
         //strength
-        makeAbility("Punish", 5, 3, 0.94*0.6, 1.25*0.6);
+        makeAbility("Punish", 5, 3, 0.94*0.6, 1.88*0.6);
         makeAbility("Kick", 25, 3, 1*0.6, 5); //identical to backhand
-        makeAbility("Dismember", 25, 3, 1.22); //50% chance of hitting 100%, 50% chance of being uniformly ditributed between 100% and 188%, thus 122% average
+        makeAbility("Dismember", 25, 3, (100 * 1 + 88 * (1.88+1)/2)/188, null, null, null, true); //100/188 chance of hitting 100%, 88/188 chance of being uniformly ditributed between 100% and 188%, thus 120.6% average
         makeAbility("Fury", 9, 6, (0.75+0.82+0.89)*0.6);
-        makeAbility("Cleave", 12, 3, 1.88*0.6); //2h
-        makeAbility("Decimate", 12, 3, 1.88*0.6); //dw
+        makeAbility("Cleave", 12, 1.88*0.6); //2h
+        makeAbility("Decimate", 12, 1.88*0.6); //dw
 
         //magic
-        makeAbility("Wrack", 5, 3, 0.564, 1.25*0.6);
-        makeAbility("Dragon Breath", 17, 3, 1.128);
+        makeAbility("Wrack", 5, 3, 0.94*0.6, 1.88*0.6);
+        makeAbility("Dragon Breath", 17, 1.128);
         makeAbility("Impact", 25, 3, 0.6, 5);
-        makeAbility("Combust", 25, 3, 1.22);
-        makeAbility("Chain", 17, 3, 0.6);
+        makeAbility("Combust", 25, 3, 1.205957, null, null, null, true);
+        makeAbility("Chain", 17, 0.6);
         makeAbility("Concentrated Blast", 9, 6, 1.476);
-        makeAbility("Sonic Wave", 9, 3, 0.942);
-        makeAbility("Corruption Blast", 25, 3, 2);
+        makeAbility("Sonic Wave", 9, 0.942);
+        makeAbility("Corruption Blast", 25, 3, 2.0, null, null, null, true);
 
         //ranged
-        makeAbility("Piercing Shot", 5, 3, 0.564, 1.25*0.6);
+        makeAbility("Piercing Shot", 5, 3, 0.94*0.6, 1.88*0.6);
         makeAbility("Snipe", 17, 6, 1.72);
-        makeAbility("Dazing Shot", 9, 3, 0.942);
+        makeAbility("Dazing Shot", 9, 0.942);
         makeAbility("Binding Shot", 25, 3, 0.6, 5);
-        makeAbility("Needle Strike", 9, 3, 0.992);
-        makeAbility("Fragmentation Shot", 25, 3, 1.22);
-        makeAbility("Ricochet", 17, 3, 0.6);
-        makeAbility("Corruption Shot", 25, 3, 2);
+        makeAbility("Needle Strike", 9, 3, 1.57*0.6, null, null, 1.05, false);
+        makeAbility("Fragmentation Shot", 25, 3, 1.205957, null, null, null, true);
+        makeAbility("Ricochet", 17, 0.6);
+        makeAbility("Corruption Shot", 25, 3, 2.0, null, null, null, true);
 
         //defence
-        makeAbility("Bash", 25, 3, 1.442*0.6);
-        makeAbility("Anticipation", 40, 3, 0);
-        makeAbility("Provoke", 17, 3, 0);
-        makeAbility("Freedom", 50, 3, 0);
+        // tier 90 + 99 stats: 864 mh weapon ability damage + 247 from 99 strength + 451 shield armour value + 99 from 99 defence
+        // normal ability damage: 864 + 247
+        makeAbility("Bash", 25, (864 + 247 + 451 + 99)/(864 + 247) * 0.6);
+        // tier 90 + 99 stats: 864 mh weapon ability damage + 245 defender ability damage + 247 from 99 strength + 216 defender armour value + 99 from 99 defence
+        // normal ability damage: 864 + 245 + 247
+        makeAbility("Bash defender", 25, (864 + 245 + 247 + 216 + 99)/(864 + 245 + 247) * 0.6);
+        makeAbility("Anticipation", 40, 0);
+        makeAbility("Provoke", 17, 0);
+        makeAbility("Freedom", 50, 0);
         //constitution
-        makeAbility("Sacrifice", 50, 3, 0.6);
-        if (SLAYER) {
-            makeAbility("Tuska's Wrath", 200, 3, 6.72); // (Slayer)
-        } else {
-            makeAbility("Tuska's Wrath", 25, 3, 0.7); // (Non-Slayer)
-        }
+        makeAbility("Sacrifice", 50, 0.6);
+        //if (SLAYER) {
+            makeAbility("Tuska's Wrath Slayer", 200, 100*99/1666); // (Slayer)
+        //} else {
+            makeAbility("Tuska's Wrath", 25, 0.7); // (Non-Slayer)
+        //}
     }
 
+    private static void makeAbility(String name, int cooldown, double damage) {
+        abilities.put(name, new Ability(name, cooldown, 3, damage));
+    }
     private static void makeAbility(String name, int cooldown, int duration, double damage) {
         abilities.put(name, new Ability(name, cooldown, duration, damage));
     }
@@ -86,6 +96,9 @@ public class Optimiser2 {
     }
     private static void makeAbility(String name, int cooldown, int duration, double damage, double stunbuff) {
         abilities.put(name, new Ability(name, cooldown, duration, damage, stunbuff));
+    }
+    private static void makeAbility(String name, Integer cooldown, Integer duration, Double damage, Integer stundur, Double stundmg, Double nextbuff, boolean isbleed) {
+        abilities.put(name, new Ability(name, cooldown, duration, damage, stundur, stundmg, nextbuff, isbleed));
     }
 
 
@@ -96,11 +109,15 @@ public class Optimiser2 {
         int i = 0;
         for (String s : abilsin) {
             if (abilities.containsKey(s)) {
-                abils[i++] = abilities.get(s);
+                if (SLAYER && s.equalsIgnoreCase("Tuska's Wrath"))
+                    abils[i++] = abilities.get(s + " Slayer");
+                else
+                    abils[i++] = abilities.get(s);
             }
         }
 
-        run();
+        bar = run();
+        optimised = true;
     }
 
     public Bar run() {
@@ -135,7 +152,7 @@ public class Optimiser2 {
     }
 
 
-       public boolean checkbar(int[] bar) {
+    public boolean checkbar(int[] bar) {
         boolean out;
         String b = "";
         for (int i : bar) {
@@ -154,8 +171,9 @@ public class Optimiser2 {
     public Ability[] reorder(int[] order) {
         //make sure to create a new array, don't reorder the base array
         Ability[] out = new Ability[order.length];
-        for (int i = 0; i < order.length; i++)
+        for (int i = 0; i < order.length; i++) {
             out[i] = abils[order[i]];
+        }
 
         return out;
     }
@@ -163,7 +181,7 @@ public class Optimiser2 {
     //calculate the damage per tick of the revolution bar given, and only print it if it a new best
     public static Bar calcrevo(Ability[] bar, double max, int[] inbar) {
         int time = 0, incr = 0, stundur=0;
-        double damage = 0;
+        double damage = 0, nextbuff = 1;
         Ability next;
         boolean forcedabilused = false;
         Bar out = new Bar();
@@ -211,15 +229,23 @@ public class Optimiser2 {
                 forcedabilused = true;
                 //log.info("Used " + FORCED_ABIL + " at t=" + time);
             }
+
+            //bleeds can't get the buff
+            if (next.isbleed) {
+                nextbuff = 1;
+            }
+
             //print("Used: " + next.name + "\t\t" + barstate);
 
             //activate the ability
             next.putoncooldown(); //put it on cooldown
             incr = next.duration; //set advancement (ticks)
             time += incr; //advance time by duration
-            damage += stundur > 0 ? next.stundmg : next.damage; //increment damage
+            damage += (stundur > 0 ? next.stundmg : next.damage) * nextbuff; //increment damage
             if (STUNS && next.stuns)
                 stundur = next.stundur;
+
+            nextbuff = next.nextbuff;
         }
 
         double dps = damage/time;
@@ -391,32 +417,55 @@ public class Optimiser2 {
             , "Tuska's Wrath"
         */
 
-/*
+        STUNS = false;
+        optimise("Two-handed melee for noobs", "Slice", "Backhand", "Sever", "Punish", "Dismember", "Fury", "Smash");
+        optimise("Dual-weilded magic for noobs", "Wrack", "Dragon Breath", "Impact", "Combust", "Concentrated Blast");
+        optimise("Two-handed magic for noobs", "Wrack", "Dragon Breath", "Impact", "Combust", "Sonic Wave");
+        optimise("Dual-wielded melee for noobs", "Slice", "Backhand", "Sever", "Punish", "Dismember", "Fury", "Havoc");
+        optimise("Two-handed ranged for noobs", "Piercing Shot", "Snipe", "Binding Shot", "Fragmentation Shot", "Dazing Shot");
+        optimise("One-handed magic with shield for noobs", "Wrack", "Dragon Breath", "Impact", "Combust", "Chain", "Bash");
+        optimise("Shieldbow for noobs", "Piercing Shot", "Snipe", "Binding Shot", "Fragmentation Shot", "Dazing Shot", "Bash");
+        optimise("One-handed melee with shield for noobs", "Slice", "Backhand", "Sever", "Punish", "Dismember", "Fury", "Bash");
+
+        optimise("Dual-wielded melee for noobs with defender", "Slice", "Backhand", "Sever", "Punish", "Dismember", "Fury", "Havoc", "Decimate", "Bash defender");
+        optimise("Dual-wielded melee", "Slice", "Backhand", "Sever", "Punish", "Dismember", "Fury", "Havoc", "Decimate");
+        optimise("Dual-wielded magic defender", "Wrack", "Dragon Breath", "Impact", "Combust", "Chain", "Concentrated Blast", "Bash defender");
+        optimise("Dual-wielded ranged defender", "Piercing Shot", "Snipe", "Binding Shot", "Fragmentation Shot", "Ricochet", "Needle Strike", "Bash defender");
+        optimise("Dual-wielded ranged", "Piercing Shot", "Snipe", "Binding Shot", "Fragmentation Shot", "Ricochet", "Needle Strike");
+        /*
+
+
         optimise("Two-handed melee", "Slice", "Backhand", "Sever", "Punish", "Dismember", "Fury", "Cleave", "Smash");
-        optimise("Dual-weilded", "Slice", "Backhand", "Sever", "Punish", "Dismember", "Fury", "Havoc", "Decimate");
+        optimise("Dual-wielded melee", "Slice", "Backhand", "Sever", "Punish", "Dismember", "Fury", "Havoc", "Decimate");
         optimise("One-handed melee", "Slice", "Backhand", "Sever", "Punish", "Dismember", "Fury");
         optimise("One-handed melee with shield", "Slice", "Backhand", "Sever", "Punish", "Dismember", "Fury", "Bash");
         nl();
         optimise("Two-handed magic", "Wrack", "Dragon Breath", "Impact", "Combust", "Chain", "Sonic Wave");
-        optimise("Dual-weilded magic", "Wrack", "Dragon Breath", "Impact", "Combust", "Chain", "Concentrated Blast");
+        optimise("Dual-wielded magic", "Wrack", "Dragon Breath", "Impact", "Combust", "Chain", "Concentrated Blast");
         optimise("One-handed magic", "Wrack", "Dragon Breath", "Impact", "Combust", "Chain");
         optimise("One-handed magic with shield", "Wrack", "Dragon Breath", "Impact", "Combust", "Chain", "Bash");
         nl();
         optimise("Two-handed ranged", "Piercing Shot", "Snipe", "Binding Shot", "Fragmentation Shot", "Ricochet", "Dazing Shot");
-        optimise("Dual-weilded ranged", "Piercing Shot", "Snipe", "Binding Shot", "Fragmentation Shot", "Ricochet", "Needle Strike");
+        optimise("Dual-wielded ranged", "Piercing Shot", "Snipe", "Binding Shot", "Fragmentation Shot", "Ricochet", "Needle Strike");
         optimise("One-handed ranged", "Piercing Shot", "Snipe", "Binding Shot", "Fragmentation Shot", "Ricochet");
         optimise("One-handed ranged with shield", "Piercing Shot", "Snipe", "Binding Shot", "Fragmentation Shot", "Ricochet", "Bash");
         optimise("Shieldbow", "Piercing Shot", "Snipe", "Binding Shot", "Fragmentation Shot", "Ricochet", "Dazing Shot", "Bash");
         nl();
+        */
         //testBar("Dragon Breath", "Combust", "Concentrated Blast", "Impact", "Chain");
-        //testBar("Combust", "Dragon Breath", "Concentrated Blast", "Chain");*/
+        //testBar("Combust", "Dragon Breath", "Concentrated Blast", "Chain");
         FORCED_ENABLED = false;
         FORCED_ABIL = "Sacrifice";
-        MAX_ABILS = 5;
-        TICKS = 1000;
-        optimise("DW Mage no stun 5 abils", "Wrack", "Dragon Breath", "Combust", "Chain", "Concentrated Blast");
-        optimise("DW Mage no stun 5 abils, tw", "Wrack", "Dragon Breath", "Combust", "Chain", "Concentrated Blast", "Tuska's Wrath");
-        optimise("DW Mage no stun 5 abils, corr", "Wrack", "Dragon Breath", "Combust", "Chain", "Concentrated Blast", "Tuska's Wrath", "Corruption Blast");
+        MAX_ABILS = 9;
+        TICKS = 3000;
+        //optimise("DW Mage no stun 5 abils", "Wrack", "Dragon Breath", "Combust", "Chain", "Concentrated Blast");
+        //optimise("DW Mage no stun 5 abils, tw", "Wrack", "Dragon Breath", "Combust", "Chain", "Concentrated Blast", "Tuska's Wrath");
+        //optimise("DW Mage no stun 5 abils, corr", "Wrack", "Dragon Breath", "Combust", "Chain", "Concentrated Blast", "Tuska's Wrath", "Corruption Blast");
+        SLAYER = true;
+        //optimise("Dual-weilded ranged", "Piercing Shot", "Snipe", "Binding Shot", "Fragmentation Shot", "Ricochet", "Needle Strike");
+        //optimise("Dual-weilded ranged", "Piercing Shot", "Snipe", "Binding Shot", "Fragmentation Shot", "Ricochet", "Needle Strike", "Corruption Shot", "Tuska's Wrath");
+        //testBar("Corruption Shot", "Needle Strike", "Snipe", "Tuska's Wrath Slayer", "Ricochet", "Fragmentation Shot", "Binding Shot", "Piercing Shot");
+        //testBar("Corruption Shot","Needle Strike","Snipe","Fragmentation Shot","Binding Shot","Tuska's Wrath Slayer","Ricochet");
     }
 
 }

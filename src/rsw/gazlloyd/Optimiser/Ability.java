@@ -1,4 +1,4 @@
-package com.gmail.gazllloyd.Optimiser;
+package rsw.gazlloyd.Optimiser;
 
 import javax.swing.*;
 import java.awt.*;
@@ -19,6 +19,19 @@ public class Ability {
     boolean stuns = false;
     int stundur = 0;
     double stundmg = 0;
+    double nextbuff = 1;
+    boolean isbleed = false;
+
+    public Ability(String name, Integer cooldown, Integer duration, Double damage, Integer stundur, Double stundmg, Double nextbuff, boolean isbleed) {
+        this(name, cooldown, duration, damage);
+        if (stundur != null)
+            this.stundur = stundur;
+        if (stundmg != null)
+            this.stundmg = stundmg;
+        if (nextbuff != null)
+            this.nextbuff = nextbuff;
+        this.isbleed = isbleed;
+    }
 
     //full constructor, with dur and buff
     public Ability(String name, int cooldown, int duration, double damage, int stundur, double stundmg) {
@@ -38,6 +51,12 @@ public class Ability {
     public Ability(String name, int cooldown, int duration, double damage, double stundmg) {
         this(name,cooldown,duration,damage);
         this.stundmg = stundmg;
+    }
+
+    //nextbuff
+    public Ability(String name, int cooldown, int duration, double damage, boolean nb, double nextBuff) {
+        this(name,cooldown,duration,damage);
+        this.nextbuff = nextBuff;
     }
 
     //basic

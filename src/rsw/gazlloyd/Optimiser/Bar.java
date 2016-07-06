@@ -1,4 +1,4 @@
-package com.gmail.gazllloyd.Optimiser;
+package rsw.gazlloyd.Optimiser;
 
 import java.util.ArrayList;
 
@@ -19,11 +19,15 @@ public class Bar {
 
     @Override
     public String toString() {
-        String str = "";
+        StringBuilder str = new StringBuilder();
+        int i = 0;
         for (Ability a : used) {
-            str += a.name + ",";
+            str.append(a.name);
+            if (++i < used.size()) {
+                str.append(",");
+            }
         }
-        return str;
+        return str.toString();
     }
 
     public String key() {

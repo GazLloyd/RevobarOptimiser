@@ -3,7 +3,10 @@
     <output-path>$PROJECT_DIR$/out/artifacts/CmdOptimiser</output-path>
     <root id="archive" name="CmdOptimiser.jar">
       <element id="module-output" name="RevobarOptimiser" />
-      <element id="library" level="project" name="commons-cli-1.2" />
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/META-INF/MANIFEST.MF" />
+      </element>
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../javalibs/commons-cli-1.2/commons-cli-1.2.jar" path-in-jar="/" />
     </root>
   </artifact>
 </component>
