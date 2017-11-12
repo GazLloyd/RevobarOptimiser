@@ -20,6 +20,12 @@ public class Optimiser2 {
     static Logger log;
     static PrintStream OUT = System.out;
 
+    //init
+    static {
+        setup();
+    }
+
+
     //per-optimisation
     public HashMap<String,Boolean> barsdone;
     public String[] abilstr;
@@ -33,7 +39,7 @@ public class Optimiser2 {
         abilities = new HashMap<>();
         //attack
         makeAbility("Slice", 5, 3, (0.3+1.2)/2, (0.8+1.46)/2);
-        makeAbility("Havoc", 17, 1.25*0.6); //dw
+        makeAbility("Havoc", 17, 1.57*0.6); //dw
         makeAbility("Backhand", 25, 3, 1*0.6, 5); //no kick included
         makeAbility("Smash", 17, 1.25*0.6); //2h
         makeAbility("Barge", 34, 1.25*0.6); //doesn't work in instances
@@ -42,9 +48,13 @@ public class Optimiser2 {
         makeAbility("Punish", 5, 3, 0.94*0.6, 1.88*0.6);
         makeAbility("Kick", 25, 3, 1*0.6, 5); //identical to backhand
         makeAbility("Dismember", 25, 3, (100 * 1 + 88 * (1.88+1)/2)/188, null, null, null, true); //100/188 chance of hitting 100%, 88/188 chance of being uniformly ditributed between 100% and 188%, thus 120.6% average
+        makeAbility("Dismember cape", 25, 3, (100 * 1 + 88 * (1.88+1)/2)/188 * 8/5, null, null, null, true); //100/188 chance of hitting 100%, 88/188 chance of being uniformly ditributed between 100% and 188%, thus 120.6% average
         makeAbility("Fury", 9, 6, (0.75+0.82+0.89)*0.6);
+        //makeAbility("Fury shorter", 9, 5, (0.75+0.82+0.89)*0.6);
+        //makeAbility("Fury shortest", 9, 3, (0.75+0.82)*0.6);
         makeAbility("Cleave", 12, 1.88*0.6); //2h
         makeAbility("Decimate", 12, 1.88*0.6); //dw
+
 
         //magic
         makeAbility("Wrack", 5, 3, 0.94*0.6, 1.88*0.6);
@@ -61,7 +71,7 @@ public class Optimiser2 {
         makeAbility("Snipe", 17, 6, 1.72);
         makeAbility("Dazing Shot", 9, 0.942);
         makeAbility("Binding Shot", 25, 3, 0.6, 5);
-        makeAbility("Needle Strike", 9, 3, 1.57*0.6, null, null, 1.05, false);
+        makeAbility("Needle Strike", 9, 3, 1.57*0.6, null, null, 1.07, false);
         makeAbility("Fragmentation Shot", 25, 3, 1.205957, null, null, null, true);
         makeAbility("Ricochet", 17, 0.6);
         makeAbility("Corruption Shot", 25, 3, 2.0, null, null, null, true);
@@ -98,7 +108,10 @@ public class Optimiser2 {
         abilities.put(name, new Ability(name, cooldown, duration, damage, stunbuff));
     }
     private static void makeAbility(String name, Integer cooldown, Integer duration, Double damage, Integer stundur, Double stundmg, Double nextbuff, boolean isbleed) {
-        abilities.put(name, new Ability(name, cooldown, duration, damage, stundur, stundmg, nextbuff, isbleed));
+        abilities.put(name, new Ability(name, cooldown, duration, damage, stundur, stundmg, nextbuff, isbleed, 8));
+    }
+    private static void makeAbility(String name, Integer cooldown, Integer duration, Double damage, Integer stundur, Double stundmg, Double nextbuff, boolean isbleed, int adrenaline) {
+        abilities.put(name, new Ability(name, cooldown, duration, damage, stundur, stundmg, nextbuff, isbleed, adrenaline));
     }
 
 
@@ -180,7 +193,7 @@ public class Optimiser2 {
 
     //calculate the damage per tick of the revolution bar given, and only print it if it a new best
     public static Bar calcrevo(Ability[] bar, double max, int[] inbar) {
-        int time = 0, incr = 0, stundur=0;
+        int time = 0, incr = 0, stundur=0, adrenaline = 0;
         double damage = 0, nextbuff = 1;
         Ability next;
         boolean forcedabilused = false;
@@ -213,7 +226,7 @@ public class Optimiser2 {
                     return out;
                 }
                 Ability a = bar[i];
-                if (a.cd == 0) {
+                if (a.canUse(adrenaline)) {
                     next = a;
                     a.used = true;
                     break;
@@ -416,7 +429,7 @@ public class Optimiser2 {
             , "Sacrifice"
             , "Tuska's Wrath"
         */
-
+/*
         STUNS = false;
         optimise("Two-handed melee for noobs", "Slice", "Backhand", "Sever", "Punish", "Dismember", "Fury", "Smash");
         optimise("Dual-weilded magic for noobs", "Wrack", "Dragon Breath", "Impact", "Combust", "Concentrated Blast");
@@ -426,20 +439,21 @@ public class Optimiser2 {
         optimise("One-handed magic with shield for noobs", "Wrack", "Dragon Breath", "Impact", "Combust", "Chain", "Bash");
         optimise("Shieldbow for noobs", "Piercing Shot", "Snipe", "Binding Shot", "Fragmentation Shot", "Dazing Shot", "Bash");
         optimise("One-handed melee with shield for noobs", "Slice", "Backhand", "Sever", "Punish", "Dismember", "Fury", "Bash");
-
+        optimise("One-handed magic with shield", "Wrack", "Dragon Breath", "Impact", "Combust", "Sacrifice", "Bash");
+        nl();
         optimise("Dual-wielded melee for noobs with defender", "Slice", "Backhand", "Sever", "Punish", "Dismember", "Fury", "Havoc", "Decimate", "Bash defender");
         optimise("Dual-wielded melee", "Slice", "Backhand", "Sever", "Punish", "Dismember", "Fury", "Havoc", "Decimate");
         optimise("Dual-wielded magic defender", "Wrack", "Dragon Breath", "Impact", "Combust", "Chain", "Concentrated Blast", "Bash defender");
         optimise("Dual-wielded ranged defender", "Piercing Shot", "Snipe", "Binding Shot", "Fragmentation Shot", "Ricochet", "Needle Strike", "Bash defender");
         optimise("Dual-wielded ranged", "Piercing Shot", "Snipe", "Binding Shot", "Fragmentation Shot", "Ricochet", "Needle Strike");
-        /*
+        */
 
 
-        optimise("Two-handed melee", "Slice", "Backhand", "Sever", "Punish", "Dismember", "Fury", "Cleave", "Smash");
-        optimise("Dual-wielded melee", "Slice", "Backhand", "Sever", "Punish", "Dismember", "Fury", "Havoc", "Decimate");
-        optimise("One-handed melee", "Slice", "Backhand", "Sever", "Punish", "Dismember", "Fury");
-        optimise("One-handed melee with shield", "Slice", "Backhand", "Sever", "Punish", "Dismember", "Fury", "Bash");
-        nl();
+        optimise("Two-handed melee", "Slice", "Backhand", "Sever", "Punish", "Dismember cape", "Fury", "Cleave", "Smash");
+        optimise("Dual-wielded melee", "Slice", "Backhand", "Sever", "Punish", "Dismember cape", "Fury", "Havoc", "Decimate");
+        optimise("One-handed melee", "Slice", "Backhand", "Sever", "Punish", "Dismember cape", "Fury", "Tuska's Wrath");
+        optimise("One-handed melee with shield", "Slice", "Backhand", "Sever", "Punish", "Dismember cape", "Fury", "Bash");
+        nl();/*
         optimise("Two-handed magic", "Wrack", "Dragon Breath", "Impact", "Combust", "Chain", "Sonic Wave");
         optimise("Dual-wielded magic", "Wrack", "Dragon Breath", "Impact", "Combust", "Chain", "Concentrated Blast");
         optimise("One-handed magic", "Wrack", "Dragon Breath", "Impact", "Combust", "Chain");

@@ -9,7 +9,7 @@ public class FullMob extends Mob {
     int level, lifepoints, defence, attack, magic, ranged, slayerlevel, size;
     String name, weakness, xp, slayercat, description;
     boolean members, attackable, aggressive, poisonous;
-    String[] area;
+    String[] area, abilities;
     Map<String, Integer> animations;
 
     /*private class Anims {

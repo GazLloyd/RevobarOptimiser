@@ -1,0 +1,13 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="bestiary">
+    <output-path>$PROJECT_DIR$/out/artifacts/bestiary</output-path>
+    <root id="archive" name="bestiary.jar">
+      <element id="module-output" name="RevobarOptimiser" />
+      <element id="library" level="project" name="gson-2.7" />
+      <element id="library" level="project" name="commons-cli-1.2" />
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/META-INF-2/META-INF/MANIFEST.MF" />
+      </element>
+    </root>
+  </artifact>
+</component>

@@ -31,6 +31,7 @@ public class CmdOptimiser {
         opt.addOption("f", true, "Text file to load bars from");
         opt.addOption("page", true, "Page to build");
         opt.addOption("o", true, "Output filename");
+        opt.addOption("db", true, "Database mode input file");
 
         CommandLineParser cmdp = new BasicParser();
         try {
@@ -61,13 +62,15 @@ public class CmdOptimiser {
         else if (cmd.hasOption("page")) {
             new PageBuild(new File(cmd.getOptionValue("page")), new File(cmd.getOptionValue("o")));
         }
+        else if (cmd.hasOption("db")) {
+            new BarDB(new File(cmd.getOptionValue("db")), new File(cmd.getOptionValue("o")));
+        }
         else {
             log.severe("You didn't specify what to do! Use -t <bar> to find the AADPT of that bar, -b <abils> to optimise a single bar or -f <file> to bulk-optimise!");
         }
     }
 
     public static void bulk(File in, File out) {
-        Optimiser2.setup();
         PrintStream outstream = System.out;
         BufferedReader r = null;
 
@@ -171,7 +174,6 @@ public class CmdOptimiser {
 
     public static void optimise(String bar, boolean stuns, int ticks, int iter, String forced, int max) {
         log.info("Entering optimise, params:\nbar: " + bar + "\nstuns: " + stuns + "\nticks: " + ticks + "\niter: " + iter + "\nforced: " + forced + "\nmax: " + max);
-        Optimiser2.setup();
         if (ticks > 0) {
             Optimiser2.TICKS = ticks;
         }
@@ -191,7 +193,6 @@ public class CmdOptimiser {
     }
 
     public static void test(String bar, boolean stuns, int ticks) {
-        Optimiser2.setup();
         if (ticks > 0)
             Optimiser2.TICKS = ticks;
         Optimiser2.STUNS = stuns;

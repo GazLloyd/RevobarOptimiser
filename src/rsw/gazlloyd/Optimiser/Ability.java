@@ -12,6 +12,7 @@ public class Ability {
     public int cooldown; //in ticks
     public int duration; //in tic2ks
     public double damage; //average - usually (max+0.2*max)/2==0.6*max
+    public int adrenaline = 8;
     public int cd = 0;
     public ImageIcon img;
     boolean used = false;
@@ -22,7 +23,7 @@ public class Ability {
     double nextbuff = 1;
     boolean isbleed = false;
 
-    public Ability(String name, Integer cooldown, Integer duration, Double damage, Integer stundur, Double stundmg, Double nextbuff, boolean isbleed) {
+    public Ability(String name, Integer cooldown, Integer duration, Double damage, Integer stundur, Double stundmg, Double nextbuff, boolean isbleed, int adrenaline) {
         this(name, cooldown, duration, damage);
         if (stundur != null)
             this.stundur = stundur;
@@ -31,6 +32,7 @@ public class Ability {
         if (nextbuff != null)
             this.nextbuff = nextbuff;
         this.isbleed = isbleed;
+        this.adrenaline = adrenaline;
     }
 
     //full constructor, with dur and buff
@@ -83,6 +85,19 @@ public class Ability {
         used = false;
         usedcount = 0;
     }
+
+    public boolean canUse(int adren) {
+        if (cd > 0)
+            return false;
+        if (adrenaline > 0)
+            return true;
+        if (adrenaline == -15 && adren > 50)
+            return true;
+        if (adrenaline == -100 && adren == 100)
+            return true;
+        return false;
+    }
+
 
     @Override
     public String toString() {

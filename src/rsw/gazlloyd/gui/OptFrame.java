@@ -154,7 +154,6 @@ public class OptFrame extends JFrame {
             //log.severe("Failed to get system look and feel");
             e.printStackTrace();
         }
-        Optimiser2.setup();
         OptFrame self = new OptFrame();
     }
 }

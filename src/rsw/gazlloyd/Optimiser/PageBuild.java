@@ -1,5 +1,7 @@
 package rsw.gazlloyd.Optimiser;
 
+import rsw.gazlloyd.Optimiser.util.FileHandler;
+
 import java.io.*;
 import java.util.logging.Logger;
 
@@ -8,52 +10,17 @@ import java.util.logging.Logger;
  */
 public class PageBuild {
 
+    FileHandler fh;
     BufferedReader br;
     PrintStream out;
     String out_str;
     Logger log = Logger.getAnonymousLogger();
 
     public PageBuild(File inFile, File outFile) {
-        if (inFile != null && inFile.exists()) {
-            try {
-                br = new BufferedReader(new FileReader(inFile));
-            } catch(Exception e) {
-                log.severe("Couldn't open input file! Make sure the file exists and can be read!");
-                e.printStackTrace();
-                System.exit(1);
-            }
-        } else {
-            log.severe("Input file "+inFile+" does not exist!");
-            System.exit(1);
-        }
-
-        if (outFile != null && !outFile.exists()) {
-            if (outFile.getParentFile().exists()) {
-                try {
-                    outFile.createNewFile();
-                } catch (Exception e) {
-                    log.severe("Couldn't create output file!");
-                    e.printStackTrace();
-                }
-            }
-        }
-        if (outFile == null || !outFile.exists()) {
-            log.severe("Out file doesn't exist!");
-            System.exit(1);
-        } else {
-            try {
-                out = new PrintStream(outFile);
-                out_str = outFile.getPath();
-            } catch (Exception e) {
-                log.severe("Couldn't create output stream! Make sure the file exists and can be written to! Writing to console instead.");
-                e.printStackTrace();
-                out = System.out;
-                out_str = "default out stream";
-            }
-            log.info("Out stream set to file " + out);
-        }
-
-        Optimiser2.setup();
+        fh = new FileHandler(inFile, outFile);
+        br = fh.br;
+        out = fh.out;
+        out_str = fh.out_str;
 
         String line;
         try {
@@ -98,7 +65,7 @@ public class PageBuild {
                     } else if (s[0].equalsIgnoreCase("@@optimise")) {
                         Optimiser2 opt = Optimiser2.optimise(s[1], s[4].split(","));
                         if (opt.bar.val > 0) {
-                            out.println("{{Revolution AADPT row|cbclass="+s[2]+"|hand="+s[3]+"|bar="+opt.bar.toString()+"|note="+s[1]+"}}");
+                            out.println("{{Revolution AADPT row|cbclass="+s[2]+"|hand="+s[3]+"|bar="+opt.bar.toString()+"|notes="+s[1]+"}}");
                         } else {
                             out.println("{{Revolution AADPT NA|"+s[1]+"}}");
                         }

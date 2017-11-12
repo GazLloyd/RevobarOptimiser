@@ -7,6 +7,7 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.ParseException;
 import java.util.logging.Logger;
 
 /**
@@ -16,7 +17,7 @@ public class bestiarytest {
 
     static String test_url = "http://services.runescape.com/m=itemdb_rs/bestiary/beastData.json?beastid=89";
     static String base_url = "http://services.runescape.com/m=itemdb_rs/bestiary/beastData.json?beastid=";
-    static File outfile = new File("D:\\Gaz\\bestiary.json");
+    static File outfile;
     static URL url;
     static HttpURLConnection req;
     static BufferedReader br;
@@ -24,7 +25,7 @@ public class bestiarytest {
     static Gson gson;
     static Logger log = Logger.getAnonymousLogger();
 
-    public static void setup() {
+    static {
         log.info("Setting up GSON");
         gson = new GsonBuilder()
                 .disableHtmlEscaping()
@@ -35,8 +36,8 @@ public class bestiarytest {
 
 
     // combine methods for simplicity
-    private static void getandwrite(int i) {
-        writejson(i, getjson(i));
+    private static void getandwrite(int i, boolean last) {
+        writejson(i, getjson(i), last);
         log.info("Wrote JSON for id " + i);
     }
 
@@ -71,11 +72,11 @@ public class bestiarytest {
 
     // write the Mob to json in a file
     // passing in i for diagnostics
-    private static void writejson(int i, Mob mob) {
+    private static void writejson(int i, Mob mob, boolean last) {
         try {
             String str = gson.toJson(mob);
             bw.write(str);
-            bw.write(",");
+            if (!last) bw.write(",");
             bw.newLine();
         }
         catch (IOException e) {
@@ -111,7 +112,7 @@ public class bestiarytest {
         //make the file (overwrite anything already there)
         try {
             outfile.createNewFile();
-            bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outfile)));
+            bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outfile), "UTF-8"));
             log.info("Created file and opened stream");
             bw.write("["); //construct an array around the entire list of objects
             bw.newLine();
@@ -124,13 +125,13 @@ public class bestiarytest {
 
         // loop of all the id
         for (int i = start; i<=end; i++) {
-            getandwrite(i);
+            getandwrite(i, i == end);
             // wait a second to try to avoid ratelimits (if there are any)
             if (i % 200 == 0) {
                 flush(i);
             }
             try {
-                Thread.sleep(1000);
+                Thread.sleep(100);
             }
             catch (InterruptedException e) {
                 // don't care if interrupted, just have a warn
@@ -163,13 +164,36 @@ public class bestiarytest {
 
 
     public static void main(String args[]) {
-        // TODO handling for ints passed via main; make into runnable jar
-        setup();
+        /* RUN OPTIONS:
+            console test of a single thing:
+                java bestiary test <id>
+            get all data and save to file
+                java bestiary <start id> <end id> [optional filename]
+        */
 
-        run(20001, 24000);
-        //consoletest(14416);
+        if (args.length < 2) {
+            log.severe("Not enough arguments");
+            System.exit(1);
+        }
+        try {
+            if (args[0].equalsIgnoreCase("test")) {
+                consoletest(Integer.parseInt(args[1], 10));
+            } else {
+                //default
+                outfile = new File("D:\\Gaz\\bestiary.json");
+                int s,e;
+                s = Integer.parseInt(args[0], 10);
+                e = Integer.parseInt(args[1], 10);
 
-        //System.out.println(gson.toJson("hello it's me"));
+                if (args[2] != null) {
+                    outfile = new File(args[2]);
+                }
+                run(s, e);
+            }
+        } catch(NumberFormatException e) {
+            log.severe("Failed to parse input as integer - make sure you typed it correctly");
+            System.exit(1);
+        }
     }
 
 }
