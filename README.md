@@ -58,6 +58,7 @@ Update for revolution++
 * Add thresholds and ultimates to config
 * Add buffs - damage and crit-adren
 * Improve permutation generator, since adding the few extra threshold/ultimate abilities is causing a combinatorial catastrophe
+* Update [lua](http://runescape.wikia.com/wiki/Module:Revolution_AADPT) and [javascript](http://runescape.wikia.com/wiki/MediaWiki:Common.js/revocalc.js)
 * Probably missing stuff
 
 Other
