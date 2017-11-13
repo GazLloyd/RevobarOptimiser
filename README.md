@@ -81,3 +81,5 @@ Bestiary
 ========
 
 Bestiary scraper. Mostly here because I was lazy and didn't make a new project. Requires GSON - https://github.com/google/gson
+
+See also http://cookmeplox.pythonanywhere.com/
