@@ -14,5 +14,35 @@
     "duration": 3,
     "cooldown": 17,
     "maxdmg": 1.57
+  },
+  {
+    "name": "Punish",
+    "duration": 3,
+    "cooldown": 5,
+    "maxdmg": 0.94,
+    "stnmax": 1.88
+  },
+  {
+    "name": "Fury",
+    "duration": 6,
+    "cooldown": 9,
+    "maxdmg": 2.46
+  },
+  {
+    "name": "Assault",
+    "type": "threshold",
+    "duration": 6,
+    "cooldown": 50,
+    "mindmg": 1.752,
+    "maxdmg": 8.76
+  },
+  {
+    "name": "Berserk",
+    "type": "ultimate",
+    "duration": 3,
+    "cooldown": 100,
+    "maxdmg": 0,
+    "damageBuff": 2,
+    "damageBuffDur": 33
   }
 ]
