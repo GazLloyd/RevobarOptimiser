@@ -25,13 +25,14 @@ public class Ability {
     public String name = "", type = "";
     public AbilityType abilityType;
     public int duration, cooldown, adrenaline, stun_duration = 0, damageBuffDur = 0;
-    public double damage = 0, stun_damage = 0, mindmg = -1, maxdmg = -1, stnmin = -1, stnmax = 0, nextBuff = 1, damageBuff = 1;
+    public double damage = 0, stun_damage = 0, mindmg = -1, maxdmg = -1, stnmin = -1, stnmax = 0, nextBuff = 1, damageBuff = 1, nextCrit = 0;
     public boolean is_bleed = false;
     int cd = 0, usedcount = 0;
     boolean used = false;
 
     public void init() {
         if (mindmg == -1) {
+            mindmg = maxdmg * 0.2;
             damage = maxdmg * 0.6;
         } else {
             damage = (mindmg + maxdmg ) / 2;
@@ -39,6 +40,7 @@ public class Ability {
 
         if (stnmax > 0) {
             if (stnmin == -1) {
+                stnmin = stnmax * 0.2;
                 stun_damage = stnmax * 0.6;
             } else {
                 stun_damage = ( stnmax + stnmin ) / 2;

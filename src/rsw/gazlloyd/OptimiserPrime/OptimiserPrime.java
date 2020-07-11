@@ -5,7 +5,6 @@ import com.google.gson.reflect.TypeToken;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * Created by gaz-l on 10/11/2017.
@@ -37,5 +36,20 @@ public class OptimiserPrime {
         System.out.println(b);
         b = new Revobar("Berserk", "Slice", "Punish");
         System.out.println(b);
+
+        System.out.println();
+        new BarOpt("Berserk", "Assault", "Slice", "Havoc", "Punish", "Fury");
+
+        System.out.println();
+        new BarOpt("Slice", "Havoc", "Backhand", "Sever", "Punish", "Dismember", "Fury", "Decimate");
+        System.out.println();
+
+
+        BarOpt bar = new  BarOpt("Slice", "Havoc", "Sever", "Dismember", "Fury", "Decimate", "Forceful Backhand", "Destroy", "Assault", "Berserk");
+
+        System.out.println(bar.best.adrenOverTime);
+
+
+
     }
 }

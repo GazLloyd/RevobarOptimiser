@@ -1,7 +1,6 @@
 [
   {
     "name": "Slice",
-    "type": "basic",
     "duration": 3,
     "cooldown": 5,
     "mindmg": 0.3,
@@ -16,6 +15,113 @@
     "maxdmg": 1.57
   },
   {
+    "name": "Backhand",
+    "duration": 3,
+    "cooldown": 25,
+    "maxdmg": 1,
+    "stun_duration": 5
+  },
+  {
+    "name": "Smash",
+    "duration": 3,
+    "cooldown": 17,
+    "maxdmg": 1.25
+  },
+  {
+    "name": "Barge",
+    "duration": 3,
+    "cooldown": 34,
+    "maxdmg": 1.25
+  },
+  {
+    "name": "Mutated Barge",
+    "duration": 3,
+    "cooldown": 34,
+    "maxdmg": 1.35
+  },
+  {
+    "name": "Sever",
+    "duration": 3,
+    "cooldown": 25,
+    "maxdmg": 1.88
+  },
+  {
+    "name": "Slaughter",
+    "type": "threshold",
+    "duration": 3,
+    "cooldown": 50,
+    "mindmg": 1.45,
+    "maxdmg": 1.45,
+    "is_bleed": true
+  },
+  {
+    "name": "Forceful Backhand",
+    "type": "threshold",
+    "duration": 3,
+    "cooldown": 25,
+    "mindmg": 0.4,
+    "maxdmg": 2,
+    "stun_duration": 5
+  },
+  {
+    "name": "Flurry",
+    "type": "threshold",
+    "duration": 7,
+    "cooldown": 34,
+    "mindmg": 0.68,
+    "maxdmg": 3.4
+  },
+  {
+    "name": "Mutated Flurry",
+    "type": "threshold",
+    "duration": 7,
+    "cooldown": 34,
+    "mindmg": 1.256,
+    "maxdmg": 6.28
+  },
+  {
+    "name": "Hurricane",
+    "type": "threshold",
+    "duration": 3,
+    "cooldown": 34,
+    "mindmg": 1.5,
+    "maxdmg": 3.8
+  },
+  {
+    "name": "Blood Tendrils",
+    "type": "threshold",
+    "duration": 3,
+    "cooldown": 75,
+    "mindmg": 1.08,
+    "maxdmg": 5.4,
+    "is_bleed": true
+  },
+  {
+    "name": "Overpower",
+    "type": "ultimate",
+    "duration": 3,
+    "cooldown": 50,
+    "mindmg": 2,
+    "maxdmg": 4
+  },
+  {
+    "name": "Massacre",
+    "type": "ultimate",
+    "duration": 3,
+    "cooldown": 100,
+    "mindmg": 3.50933333,
+    "maxdmg": 5.0133333,
+    "is_bleed": true
+  },
+  {
+    "name": "Meteor Strike",
+    "type": "ultimate",
+    "duration": 3,
+    "cooldown": 100,
+    "mindmg": 2.5,
+    "maxdmg": 3.5
+  },
+  {
     "name": "Punish",
     "duration": 3,
     "cooldown": 5,
@@ -23,10 +129,79 @@
     "stnmax": 1.88
   },
   {
+    "name": "Kick",
+    "duration": 3,
+    "cooldown": 25,
+    "maxdmg": 1,
+    "stun_duration": 5
+  },
+  {
+    "name": "Dismember",
+    "duration": 3,
+    "cooldown": 25,
+    "maxdmg": 1.205957446,
+    "mindmg": 1.205957446,
+    "is_bleed": true
+  },
+  {
+    "name": "Dismember cape",
+    "duration": 3,
+    "cooldown": 5,
+    "maxdmg": 1.929531913,
+    "mindmg": 1.929531913,
+    "is_bleed": true
+  },
+  {
     "name": "Fury",
     "duration": 6,
     "cooldown": 9,
-    "maxdmg": 2.46
+    "maxdmg": 1.52475,
+    "mindmg": 1.52475,
+    "nextCrit": 0.15
+  },
+  {
+    "name": "Mutated Fury",
+    "duration": 3,
+    "cooldown": 9,
+    "maxdmg": 1.57,
+    "nextCrit": 0.1
+  },
+  {
+    "name": "Cleave",
+    "duration": 3,
+    "cooldown": 12,
+    "maxdmg": 1.88
+  },
+  {
+    "name": "Decimate",
+    "duration": 3,
+    "cooldown": 12,
+    "maxdmg": 1.88
+  },
+  {
+    "name": "Stomp",
+    "type": "threshold",
+    "duration": 3,
+    "cooldown": 25,
+    "mindmg": 0.4,
+    "maxdmg": 2,
+    "stun_duration": 5
+  },
+  {
+    "name": "Destroy",
+    "type": "threshold",
+    "duration": 7,
+    "cooldown": 34,
+    "mindmg": 1.504,
+    "maxdmg": 7.52
+  },
+  {
+    "name": "Quake",
+    "type": "threshold",
+    "duration": 3,
+    "cooldown": 34,
+    "mindmg": 0.376,
+    "maxdmg": 1.88
   },
   {
     "name": "Assault",
@@ -44,5 +219,274 @@
     "maxdmg": 0,
     "damageBuff": 2,
     "damageBuffDur": 33
+  },
+  {
+    "name": "Pulverise",
+    "type": "ultimate",
+    "duration": 3,
+    "cooldown": 100,
+    "mindmg": 2.5,
+    "maxdmg": 3.5
+  },
+  {
+    "name": "Frenzy",
+    "type": "ultimate",
+    "duration": 7,
+    "cooldown": 100,
+    "mindmg": 3.8,
+    "maxdmg": 8.4
+  },
+  {
+    "name": "Wrack",
+    "duration": 3,
+    "cooldown": 5,
+    "maxdmg": 0.94,
+    "stnmax": 1.88
+  },
+  {
+    "name": "Dragon Breath",
+    "duration": 3,
+    "cooldown": 17,
+    "maxdmg": 1.88
+  },
+  {
+    "name": "Sonic Wave",
+    "duration": 3,
+    "cooldown": 9,
+    "maxdmg": 1.57
+  },
+  {
+    "name": "Concentrated Blast",
+    "duration": 6,
+    "cooldown": 9,
+    "maxdmg": 1.52475,
+    "mindmg": 1.52475,
+    "nextCrit": 0.15
+  },
+  {
+    "name": "Impact",
+    "duration": 3,
+    "cooldown": 25,
+    "maxdmg": 1,
+    "stun_duration": 5
+  },
+  {
+    "name": "Combust",
+    "duration": 3,
+    "cooldown": 25,
+    "maxdmg": 1.205957446,
+    "mindmg": 1.205957446,
+    "is_bleed": true
+  },
+  {
+    "name": "Chain",
+    "duration": 3,
+    "cooldown": 17,
+    "maxdmg": 1
+  },
+  {
+    "name": "Corruption Blast",
+    "duration": 3,
+    "cooldown": 25,
+    "maxdmg": 3,
+    "mindmg": 1,
+    "is_bleed": true
+  },
+  {
+    "name": "Asphyxiate",
+    "type": "threshold",
+    "duration": 7,
+    "cooldown": 34,
+    "maxdmg": 7.52,
+    "stun_duration": 6
+  },
+  {
+    "name": "Deep Impact",
+    "type": "threshold",
+    "duration": 3,
+    "cooldown": 25,
+    "maxdmg": 2,
+    "stun_duration": 5
+  },
+  {
+    "name": "Wild Magic",
+    "type": "threshold",
+    "duration": 3,
+    "cooldown": 34,
+    "mindmg": 1,
+    "maxdmg": 4.3
+  },
+  {
+    "name": "Smoke Tendrils",
+    "type": "threshold",
+    "duration": 7,
+    "cooldown": 75,
+    "mindmg": 1.15,
+    "maxdmg": 5.75
+  },
+  {
+    "name": "Omnipower",
+    "type": "ultimate",
+    "duration": 3,
+    "cooldown": 50,
+    "mindmg": 2,
+    "maxdmg": 4
+  },
+  {
+    "name": "Metamorphosis",
+    "type": "ultimate",
+    "duration": 3,
+    "cooldown": 100,
+    "maxdmg": 0,
+    "damageBuff": 1.625,
+    "damageBuffDur": 25
+  },
+  {
+    "name": "Tsunami",
+    "type": "ultimate",
+    "duration": 3,
+    "cooldown": 100,
+    "mindmg": 2,
+    "maxdmg": 3
+  },
+  {
+    "name": "Sunshine",
+    "type": "ultimate",
+    "duration": 3,
+    "cooldown": 100,
+    "mindmg": 1.5,
+    "maxdmg": 3,
+    "damageBuff": 1.5,
+    "damageBuffDur": 50
+  },
+  {
+    "name": "Piercing Shot",
+    "duration": 3,
+    "cooldown": 5,
+    "maxdmg": 0.94,
+    "stnmax": 1.88
+  },
+  {
+    "name": "Snipe",
+    "duration": 6,
+    "cooldown": 17,
+    "maxdmg": 2.19,
+    "mindmg": 1.25
+  },
+  {
+    "name": "Dazing Shot",
+    "duration": 3,
+    "cooldown": 9,
+    "maxdmg": 1.57
+  },
+  {
+    "name": "Binding Shot",
+    "duration": 3,
+    "cooldown": 25,
+    "maxdmg": 1,
+    "stun_duration": 5
+  },
+  {
+    "name": "Needle Strike",
+    "duration": 3,
+    "cooldown": 9,
+    "maxdmg": 1.57,
+    "nextBuff": 1.07
+  },
+  {
+    "name": "Fragmentation Shot",
+    "duration": 3,
+    "cooldown": 25,
+    "maxdmg": 1.205957446,
+    "mindmg": 1.205957446,
+    "is_bleed": true
+  },
+  {
+    "name": "Ricochet",
+    "duration": 3,
+    "cooldown": 17,
+    "maxdmg": 1
+  },
+  {
+    "name": "Corruption Shot",
+    "duration": 3,
+    "cooldown": 25,
+    "maxdmg": 3,
+    "mindmg": 1,
+    "is_bleed": true
+  },
+  {
+    "name": "Snap Shot",
+    "type": "threshold",
+    "duration": 3,
+    "cooldown": 34,
+    "mindmg": 2,
+    "maxdmg": 3.3
+  },
+  {
+    "name": "Tight Bindings",
+    "type": "threshold",
+    "duration": 3,
+    "cooldown": 25,
+    "maxdmg": 2,
+    "stun_duration": 5
+  },
+  {
+    "name": "Rapid Fire",
+    "type": "threshold",
+    "duration": 7,
+    "cooldown": 34,
+    "maxdmg": 7.52
+  },
+  {
+    "name": "Bombardment",
+    "type": "threshold",
+    "duration": 3,
+    "cooldown": 50,
+    "maxdmg": 2.19
+  },
+  {
+    "name": "Shadow Tendrils",
+    "type": "threshold",
+    "duration": 3,
+    "cooldown": 75,
+    "mindmg": 274.246,
+    "maxdmg": 274.246
+  },
+  {
+    "name": "Deadshot",
+    "type": "ultimate",
+    "duration": 3,
+    "cooldown": 50,
+    "mindmg": 3.50933333,
+    "maxdmg": 5.0133333,
+    "is_bleed": true
+  },
+  {
+    "name": "Incendiary Shot",
+    "type": "ultimate",
+    "duration": 3,
+    "cooldown": 100,
+    "mindmg": 2.5,
+    "maxdmg": 3.5
+  },
+  {
+    "name": "Unload",
+    "type": "ultimate",
+    "duration": 7,
+    "cooldown": 100,
+    "mindmg": 3.8,
+    "maxdmg": 8.4
+  },
+  {
+    "name": "Death's Swiftness",
+    "type": "ultimate",
+    "duration": 3,
+    "cooldown": 100,
+    "mindmg": 1.5,
+    "maxdmg": 3,
+    "damageBuff": 1.5,
+    "damageBuffDur": 50
   }
+
 ]

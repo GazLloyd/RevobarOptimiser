@@ -2,12 +2,13 @@ package rsw.gazlloyd.bestiary;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
 
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.text.ParseException;
+import java.util.Vector;
 import java.util.logging.Logger;
 
 /**
@@ -24,6 +25,7 @@ public class bestiarytest {
     static BufferedWriter bw;
     static Gson gson;
     static Logger log = Logger.getAnonymousLogger();
+    static Vector<Integer> idsToDo = new Vector();
 
     static {
         log.info("Setting up GSON");
@@ -37,8 +39,13 @@ public class bestiarytest {
 
     // combine methods for simplicity
     private static void getandwrite(int i, boolean last) {
-        writejson(i, getjson(i), last);
-        log.info("Wrote JSON for id " + i);
+        Mob m = getjson(i);
+        if (m == null) {
+            log.info("Failed to get JSON for id " + i + ", trying again later");
+        } else {
+            writejson(i, getjson(i), last);
+            log.info("Wrote JSON for id " + i);
+        }
     }
 
     // fetch the JSON from the url; return the FullMob
@@ -58,6 +65,9 @@ public class bestiarytest {
             log.severe("IO Exception when fetching JSON for id " + i);
             e.printStackTrace();
             return new NullMob(i);
+        } catch (JsonSyntaxException e) {
+            idsToDo.add(i);
+            return null;
         } catch (Exception e) {
             log.severe("Generic other exception when fetching JSON for id " + i);
             e.printStackTrace();
@@ -122,10 +132,14 @@ public class bestiarytest {
             e.printStackTrace();
             return;
         }
+        for (int i = start; i<=end; i++) {
+            idsToDo.add(i);
+        }
 
         // loop of all the id
-        for (int i = start; i<=end; i++) {
-            getandwrite(i, i == end);
+        while (!idsToDo.isEmpty()) {
+            int i = idsToDo.remove(0);
+            getandwrite(i, idsToDo.isEmpty());
             // wait a second to try to avoid ratelimits (if there are any)
             if (i % 200 == 0) {
                 flush(i);
@@ -185,7 +199,7 @@ public class bestiarytest {
                 s = Integer.parseInt(args[0], 10);
                 e = Integer.parseInt(args[1], 10);
 
-                if (args[2] != null) {
+                if (args.length > 2 && args[2] != null) {
                     outfile = new File(args[2]);
                 }
                 run(s, e);

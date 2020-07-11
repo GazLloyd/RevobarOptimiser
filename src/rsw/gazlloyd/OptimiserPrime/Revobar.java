@@ -12,6 +12,8 @@ public class Revobar {
     public ArrayList<Ability> usedBar;
     public double revoval;
     boolean revocalced = false;
+    public ArrayList<Integer> asIntsUsed = new ArrayList<>();
+    public ArrayList<AdrenTick> adrenOverTime = new ArrayList<>();
 
 
     public Revobar(String... str) {
@@ -33,7 +35,7 @@ public class Revobar {
         double adrenaline = 0;
 
         //TODO make into settings
-        int maximumTicks = 3000;
+        int maximumTicks = 500;
         boolean stuns = false;
 
         //make sure everything is reset
@@ -45,7 +47,7 @@ public class Revobar {
 
         int adrenBuffedTicks = 0, damageBuffedTicks = 0;
         double adrenBuff = 0, damageBuff = 1;
-        double buffNextAbil = 1;
+        double buffNextAbil = 1, nextAbilCrit = 0;
 
         int stunned = 0;
 
@@ -68,18 +70,25 @@ public class Revobar {
                 revoval = -1;
                 return -1;
             }
+            adrenOverTime.add(new AdrenTick(totalTicks, adrenaline, ability.name));
 
             //perform the ability
 
+            if (stuns) {
+                stunned = Math.max(stunned, ability.stun_duration);
+            }
 
-            double abilityDamage = ability.damage;
+            double abilityDamage = ability.damage, abilityMaxDamage = ability.maxdmg;
             if (stuns && stunned > 0) {
                 abilityDamage = ability.stun_damage;
+                abilityMaxDamage = ability.stnmax;
             }
             if (!ability.is_bleed) {
+                if (nextAbilCrit > 0) {
+                    abilityDamage = abilityDamage * (1 - nextAbilCrit) + abilityMaxDamage * 0.975 * nextAbilCrit;
+                }
                 abilityDamage *= buffNextAbil * damageBuff;
             }
-            buffNextAbil = 1;
             totalDamage += abilityDamage;
 
 
@@ -89,8 +98,12 @@ public class Revobar {
             totalTicks += ability.duration;
 
 
-            damageBuff = ability.damageBuff;
-            damageBuffedTicks = ability.damageBuffDur;
+            if (ability.damageBuff > 1) {
+                damageBuff = ability.damageBuff;
+                damageBuffedTicks = ability.damageBuffDur;
+            }
+            buffNextAbil = ability.nextBuff;
+            nextAbilCrit = ability.nextCrit;
 
 
             ability.putOnCooldown();
@@ -105,6 +118,7 @@ public class Revobar {
             if (damageBuffedTicks == 0) {
                 damageBuff = 1;
             }
+            stunned = Math.max(stunned - ability.duration, 0);
 
         }
 
@@ -114,6 +128,11 @@ public class Revobar {
                 usedBar.add(a);
             }
         }
+
+        for (Ability a : usedBar) {
+            asIntsUsed.add(bar.indexOf(a));
+        }
+        asIntsUsed.trimToSize();
 
         revoval = totalDamage / totalTicks;
         revocalced = true;
