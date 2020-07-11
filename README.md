@@ -3,7 +3,7 @@ About
 
 Revolution bar optimiser: given X list of abilities, what's the best bar you can get with it?
 
-See also http://runescape.wikia.com/wiki/Revolution/Bars
+See also http://runescape.wiki/w/Revolution/Bars
 
 Requires Apache Commons CLI - https://commons.apache.org/proper/commons-cli/ (developed on 1.2 but probably works on any after that).
 
@@ -58,7 +58,7 @@ Update for revolution++
 * Add thresholds and ultimates to config
 * Add buffs - damage and crit-adren
 * Improve permutation generator, since adding the few extra threshold/ultimate abilities is causing a combinatorial catastrophe
-* Update [lua](http://runescape.wikia.com/wiki/Module:Revolution_AADPT) and [javascript](http://runescape.wikia.com/wiki/MediaWiki:Common.js/revocalc.js)
+* Update [lua](http://runescape.wiki/w/Module:Revolution_AADPT) and [javascript](http://runescape.wiki/w/MediaWiki:Gadget-revocalc-core.js)
 * Probably missing stuff
 
 Other
@@ -82,4 +82,4 @@ Bestiary
 
 Bestiary scraper. Mostly here because I was lazy and didn't make a new project. Requires GSON - https://github.com/google/gson
 
-See also http://cookmeplox.pythonanywhere.com/
+See also http://chisel.weirdgloop.org/bestiary/
